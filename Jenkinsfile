@@ -4,7 +4,8 @@ pipeline {
         AZURE_CREDENTIALS_ID = 'azure-service-principal'
         RESOURCE_GROUP = 'rg-jenkins'
         APP_SERVICE_NAME = 'webapijenkinspratham22025'
-    
+        DOTNET_ROOT = "/usr/local/share/dotnet"
+        PATH+EXTRA = "/usr/local/share/dotnet:/usr/local/bin"
     }
 
     stages {
