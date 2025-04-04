@@ -21,6 +21,12 @@ pipeline {
             }
         }
 
+        stage('Package') {
+            steps {
+                sh 'tar -cvf publish.tar ./publish'  // Using tar instead of zip
+            }
+        }
+
         stage('Deploy') {
             steps {
                 withCredentials([azureServicePrincipal(credentialsId: AZURE_CREDENTIALS_ID)]) {
@@ -31,17 +37,14 @@ pipeline {
                     }
                     sh "az login --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} --tenant ${AZURE_TENANT_ID}"
                     
-                    // Create a zip package
-                    sh "zip -r publish.zip ./publish"
-
-                    // Deploy the package using direct Azure WebApp deployment
+                    // Deploy using tar file
                     sh """
                     az webapp deploy --resource-group $RESOURCE_GROUP --name $APP_SERVICE_NAME \
-                    --src-path ./publish.zip --type zip --restart
+                    --src-path ./publish.tar --type zip --restart
                     """
 
-                    // Clean up local zip file after deployment
-                    sh "rm -f publish.zip"
+                    // Clean up local tar file after deployment
+                    sh "rm -f publish.tar"
                 }
             }
         }
