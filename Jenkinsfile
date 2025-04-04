@@ -28,7 +28,7 @@ pipeline {
                     sh "zip -r publish.zip ./publish"
                     
                     sh "az webapp deployment source config-zip --resource-group $RESOURCE_GROUP --name $APP_SERVICE_NAME --src ./publish.zip"
-                    sh "az webapp show --resource-group $RESOURCE_GROUP --name $APP_SERVICE_NAME --query "state""
+                    sh "az webapp show --resource-group $RESOURCE_GROUP --name $APP_SERVICE_NAME"
 
 
                 }
